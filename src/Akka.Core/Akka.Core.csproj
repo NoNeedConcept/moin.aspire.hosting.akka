@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <IsAspireSharedProject>true</IsAspireSharedProject>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+
+        <PackageReference Include="Servus.Akka"/>
+        <PackageReference Include="Servus.Core"/>
+        <PackageReference Include="moin.akka.endpoint"/>
+        <PackageReference Include="Akka.Cluster.Hosting"/>
+        <PackageReference Include="Serilog.AspNetCore"/>
+        <PackageReference Include="Serilog.Sinks.OpenTelemetry"/>
+        <PackageReference Include="Microsoft.Extensions.Http.Resilience"/>
+        <PackageReference Include="Microsoft.Extensions.ServiceDiscovery"/>
+        <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol"/>
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting"/>
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore"/>
+        <PackageReference Include="OpenTelemetry.Instrumentation.Http"/>
+        <PackageReference Include="OpenTelemetry.Instrumentation.Runtime"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Akka.Cluster.Hosting.Aspire\Akka.Cluster.Hosting.Aspire.csproj" />
+    </ItemGroup>
+
+</Project>
