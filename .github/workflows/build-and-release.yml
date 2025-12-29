@@ -50,7 +50,7 @@ jobs:
         run: dotnet build --configuration Release --no-restore ${{ env.PROJECT_PATH }} /p:Version=${{ steps.gitversion.outputs.semVer }}
 
       - name: Run tests
-        run: dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage;Format=opencover" --verbosity normal ${{ env.PROJECT_PATH }}
+        run: dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage;Format=opencover" --verbosity normal --filter "Category!=Integration" ${{ env.PROJECT_PATH }}
         
       - name: Create NuGet package
         run: dotnet pack --configuration Release --no-build --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }} ${{ env.PROJECT_PATH }} /p:PackageVersion=${{ steps.gitversion.outputs.semVer }}

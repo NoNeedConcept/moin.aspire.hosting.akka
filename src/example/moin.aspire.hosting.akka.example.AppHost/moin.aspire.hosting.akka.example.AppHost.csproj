@@ -1,0 +1,21 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.0.0">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <UserSecretsId>aa181b61-1bbb-4578-b6e3-553d1112cc47</UserSecretsId>
+        <IsPackable>false</IsPackable>
+        <RootNamespace>Aspire.Hosting.Akka.Example.AppHost</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Aspire.Hosting.AppHost" Version="13.1.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\core\moin.aspire.hosting.akka\moin.aspire.hosting.akka.csproj" IsAspireProjectResource="false" />
+    </ItemGroup>
+
+</Project>

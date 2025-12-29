@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json.schemastore.org/aspire-8.0.json",
+  "resources": {
+    "AkkaNodeOne": {
+      "type": "container.v1",
+      "build": {
+        "context": "../..",
+        "dockerfile": "../akka.node.one/Dockerfile"
+      },
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "akka__remote__dot-netty__tcp__port": "{AkkaNodeOne.bindings.akka.targetPort}",
+        "akka__remote__dot-netty__tcp__public-hostname": "{AkkaNodeOne.bindings.akka.host}",
+        "akka__cluster__seed-nodes__0": "akka.tcp://testing@{lighthouse-0.bindings.akka.host}:{lighthouse-0.bindings.akka.port}",
+        "akka__cluster__seed-nodes__1": "akka.tcp://testing@{lighthouse-1.bindings.akka.host}:{lighthouse-1.bindings.akka.port}",
+        "akka__cluster__seed-nodes__2": "akka.tcp://testing@{lighthouse-2.bindings.akka.host}:{lighthouse-2.bindings.akka.port}"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http",
+          "targetPort": 8080
+        },
+        "akka": {
+          "scheme": "akka.tcp",
+          "protocol": "tcp",
+          "transport": "tcp",
+          "targetPort": 8000
+        }
+      }
+    },
+    "AkkaNodeTwo": {
+      "type": "container.v1",
+      "build": {
+        "context": "../..",
+        "dockerfile": "../akka.node.two/Dockerfile"
+      },
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "akka__remote__dot-netty__tcp__port": "{AkkaNodeTwo.bindings.akka.targetPort}",
+        "akka__remote__dot-netty__tcp__public-hostname": "{AkkaNodeTwo.bindings.akka.host}",
+        "akka__cluster__seed-nodes__0": "akka.tcp://testing@{lighthouse-0.bindings.akka.host}:{lighthouse-0.bindings.akka.port}",
+        "akka__cluster__seed-nodes__1": "akka.tcp://testing@{lighthouse-1.bindings.akka.host}:{lighthouse-1.bindings.akka.port}",
+        "akka__cluster__seed-nodes__2": "akka.tcp://testing@{lighthouse-2.bindings.akka.host}:{lighthouse-2.bindings.akka.port}"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http",
+          "targetPort": 8080
+        },
+        "akka": {
+          "scheme": "akka.tcp",
+          "protocol": "tcp",
+          "transport": "tcp",
+          "targetPort": 8001
+        }
+      }
+    },
+    "lighthouse-0": {
+      "type": "container.v0",
+      "image": "docker.io/petabridge/lighthouse:1.8.0",
+      "env": {
+        "CLUSTER_PORT": "{lighthouse-0.bindings.akka.targetPort}",
+        "ACTORSYSTEM": "testing",
+        "CLUSTER_IP": "{lighthouse-0.bindings.akka.host}",
+        "CLUSTER_SEEDS": "akka.tcp://testing@{lighthouse-0.bindings.akka.host}:{lighthouse-0.bindings.akka.port},akka.tcp://testing@{lighthouse-1.bindings.akka.host}:{lighthouse-1.bindings.akka.port},akka.tcp://testing@{lighthouse-2.bindings.akka.host}:{lighthouse-2.bindings.akka.port}"
+      },
+      "bindings": {
+        "akka": {
+          "scheme": "akka.tcp",
+          "protocol": "tcp",
+          "transport": "tcp",
+          "targetPort": 4053,
+          "external": true
+        },
+        "pbm": {
+          "scheme": "tcp",
+          "protocol": "tcp",
+          "transport": "tcp",
+          "targetPort": 9011,
+          "external": true
+        }
+      }
+    },
+    "lighthouse-1": {
+      "type": "container.v0",
+      "image": "docker.io/petabridge/lighthouse:1.8.0",
+      "env": {
+        "CLUSTER_PORT": "{lighthouse-1.bindings.akka.targetPort}",
+        "ACTORSYSTEM": "testing",
+        "CLUSTER_IP": "{lighthouse-1.bindings.akka.host}",
+        "CLUSTER_SEEDS": "akka.tcp://testing@{lighthouse-0.bindings.akka.host}:{lighthouse-0.bindings.akka.port},akka.tcp://testing@{lighthouse-1.bindings.akka.host}:{lighthouse-1.bindings.akka.port},akka.tcp://testing@{lighthouse-2.bindings.akka.host}:{lighthouse-2.bindings.akka.port}"
+      },
+      "bindings": {
+        "akka": {
+          "scheme": "akka.tcp",
+          "protocol": "tcp",
+          "transport": "tcp",
+          "targetPort": 4053,
+          "external": true
+        },
+        "pbm": {
+          "scheme": "tcp",
+          "protocol": "tcp",
+          "transport": "tcp",
+          "targetPort": 9011,
+          "external": true
+        }
+      }
+    },
+    "lighthouse-2": {
+      "type": "container.v0",
+      "image": "docker.io/petabridge/lighthouse:1.8.0",
+      "env": {
+        "CLUSTER_PORT": "{lighthouse-2.bindings.akka.targetPort}",
+        "ACTORSYSTEM": "testing",
+        "CLUSTER_IP": "{lighthouse-2.bindings.akka.host}",
+        "CLUSTER_SEEDS": "akka.tcp://testing@{lighthouse-0.bindings.akka.host}:{lighthouse-0.bindings.akka.port},akka.tcp://testing@{lighthouse-1.bindings.akka.host}:{lighthouse-1.bindings.akka.port},akka.tcp://testing@{lighthouse-2.bindings.akka.host}:{lighthouse-2.bindings.akka.port}"
+      },
+      "bindings": {
+        "akka": {
+          "scheme": "akka.tcp",
+          "protocol": "tcp",
+          "transport": "tcp",
+          "targetPort": 4053,
+          "external": true
+        },
+        "pbm": {
+          "scheme": "tcp",
+          "protocol": "tcp",
+          "transport": "tcp",
+          "targetPort": 9011,
+          "external": true
+        }
+      }
+    }
+  }
+}

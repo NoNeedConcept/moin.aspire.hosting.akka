@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <IsAspireSharedProject>true</IsAspireSharedProject>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+        <PackageReference Include="Akka.Logger.Serilog" Version="1.5.25" />
+
+        <PackageReference Include="Servus.Akka" Version="0.3.5"/>
+        <PackageReference Include="Servus.Core" Version="0.33.2"/>
+        <PackageReference Include="moin.akka.endpoint" Version="0.1.1"/>
+        <PackageReference Include="Akka.Cluster.Hosting" Version="1.5.57"/>
+        <PackageReference Include="Serilog.AspNetCore" Version="10.0.0"/>
+        <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.2.0"/>
+        <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="10.1.0"/>
+        <PackageReference Include="Microsoft.Extensions.ServiceDiscovery" Version="10.1.0"/>
+        <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.14.0"/>
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.14.0"/>
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.14.0"/>
+        <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.14.0"/>
+        <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.14.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\hosting\moin.akka.cluster.hosting.aspire\moin.akka.cluster.hosting.aspire.csproj" />
+    </ItemGroup>
+
+</Project>
