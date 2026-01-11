@@ -35,20 +35,29 @@ public class AkkaResourceBuilder(string name, string systemName, IDistributedApp
         foreach (var node in nodes)
         {
             var nodeBuilder = builder.CreateResourceBuilder(node);
-
-            var isLighthouse = node.HasAnnotationOfType<LighthouseAnnotation>();
-            if (isLighthouse)
+            if (!nodeBuilder.Resource.TryGetAnnotationsOfType<AkkaNodeAnnotation>(out var result))
             {
-                nodeBuilder.WithEnvironment(name: LighthouseResource.ClusterSeedsEnvName,
-                    value: builder.GetSeedNodesForLighthouse(systemName));
+                continue;
+            }
+
+            var annotation = result.Single();
+            var seedNodeEnvName = annotation.SeedNodeEnvConfigure.Invoke();
+            var mode = annotation.Mode;
+
+            if (mode is not EnvValueMode.Array)
+            {
+                nodeBuilder.WithEnvironment(name: seedNodeEnvName, value: builder.GetSeedNodesOneliner(systemName));
                 continue;
             }
 
             var seedNodes = builder.GetSeedNodeAddresse(SystemName);
+            seedNodeEnvName = seedNodeEnvName.EndsWith("__")
+                ? seedNodeEnvName
+                : $"{seedNodeEnvName}__";
             for (var i = 0; i < seedNodes.Length; i++)
             {
                 nodeBuilder
-                    .WithEnvironment(name: $"akka__cluster__seed-nodes__{i}", value: seedNodes[i])
+                    .WithEnvironment(name: $"{seedNodeEnvName}{i}", value: seedNodes[i])
                     .WithReferenceRelationship(seedNodeResources[i]);
             }
         }

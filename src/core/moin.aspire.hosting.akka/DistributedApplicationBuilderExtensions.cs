@@ -21,7 +21,7 @@ public static class DistributedApplicationBuilderExtensions
         return builder;
     }
 
-    internal static ReferenceExpression GetSeedNodesForLighthouse(this IDistributedApplicationBuilder builder,
+    internal static ReferenceExpression GetSeedNodesOneliner(this IDistributedApplicationBuilder builder,
         string systemName)
     {
         var referenceExpressionBuilder = new ReferenceExpressionBuilder();

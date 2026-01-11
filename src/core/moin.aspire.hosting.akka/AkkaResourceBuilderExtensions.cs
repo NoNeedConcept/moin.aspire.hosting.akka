@@ -51,7 +51,8 @@ public static class AkkaResourceBuilderExtensions
             .WithAnnotation(new AkkaClusterAnnotation(builder.SystemName))
             .WithAnnotation(new LighthouseAnnotation())
             .WithAnnotation(new AkkaSeedNodeAnnotation())
-            .WithAnnotation(new AkkaNodeAnnotation())
+            .WithAnnotation(new AkkaNodeAnnotation(() => LighthouseResource.ClusterSeedsEnvName,
+                EnvValueMode.SingleValue))
             .WithEnvironment(LighthouseResource.ActorSystemNameEnvName, builder.SystemName)
             .WithEnvironment(context =>
             {
@@ -71,19 +72,52 @@ public static class AkkaResourceBuilderExtensions
         return builder.WithNode(resource, targetPort, endpointName);
     }
 
-    public static IAkkaResourceBuilder WithNode<T>(this IAkkaResourceBuilder builder, IResourceBuilder<T> resource,
-        int targetPort, string endpointName = AkkaEndpointName)
+    public static IAkkaResourceBuilder WithNode<T>(this IAkkaResourceBuilder builder,
+        IResourceBuilder<T> resource,
+        int targetPort, 
+        string endpointName = AkkaEndpointName)
         where T : IResourceWithEndpoints, IResourceWithEnvironment
     {
+        builder.WithNode(resource,
+            targetPort,
+            () => endpointName,
+            () => "akka__remote__dot-netty__tcp__public-hostname",
+            () => "akka__remote__dot-netty__tcp__port",
+            options =>
+            {
+                options.SeedNodeEnvNameConfigure = () => "akka__cluster__seed-nodes__";
+                options.Mode = EnvValueMode.Array;
+            });
+        return builder;
+    }
+
+    public static IAkkaResourceBuilder WithNode<T>(this IAkkaResourceBuilder builder,
+        IResourceBuilder<T> resource,
+        int targetPort,
+        Func<string>? endpointNameConfigure = null,
+        Func<string>? hostnameEnvConfigure = null,
+        Func<string>? portEnvConfigure = null,
+        Action<SeedNodeOptions>? seedNodeEnvConfigure = null)
+        where T : IResourceWithEndpoints, IResourceWithEnvironment
+    {
+        ArgumentNullException.ThrowIfNull(endpointNameConfigure);
+        ArgumentNullException.ThrowIfNull(hostnameEnvConfigure);
+        ArgumentNullException.ThrowIfNull(portEnvConfigure);
+        ArgumentNullException.ThrowIfNull(seedNodeEnvConfigure);
+        var endpointName = endpointNameConfigure.Invoke();
+        var seedNodeOptions = new SeedNodeOptions();
+        seedNodeEnvConfigure.Invoke(seedNodeOptions);
         resource
-            .WithAnnotation(new AkkaClusterAnnotation(builder.SystemName))
-            .WithAnnotation(new AkkaNodeAnnotation())
-            .WithEndpoint(targetPort: targetPort, scheme: "akka.tcp", env: "akka__remote__dot-netty__tcp__port",
+            .WithAnnotation(new AkkaClusterAnnotation(builder.SystemName), ResourceAnnotationMutationBehavior.Replace)
+            .WithAnnotation(
+                new AkkaNodeAnnotation(seedNodeOptions.SeedNodeEnvNameConfigure, seedNodeOptions.Mode),
+                ResourceAnnotationMutationBehavior.Replace)
+            .WithEndpoint(targetPort: targetPort, scheme: "akka.tcp", env: portEnvConfigure.Invoke(),
                 name: endpointName, isProxied: false)
             .WithEnvironment(context =>
             {
                 var endpoint = resource.GetEndpoint(endpointName);
-                context.EnvironmentVariables["akka__remote__dot-netty__tcp__public-hostname"] =
+                context.EnvironmentVariables[hostnameEnvConfigure.Invoke()] =
                     ReferenceExpression.Create($"{endpoint.Property(EndpointProperty.Host)}");
             });
         return builder;

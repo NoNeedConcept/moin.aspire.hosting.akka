@@ -24,12 +24,25 @@ var nodeTwo = builder
     .WithHttpHealthCheck(path: "/alive")
     .WithHttpHealthCheck(path: "/started");
 
+var nodeTwoAsSeedNode = builder
+    .AddDockerfile("AkkaNodeTwoAsSeedNode", "../../", "example/akka.node.two/Dockerfile")
+    .WithContainerName("akka.node.two.seed-node")
+    .WithImageRegistry("localhost")
+    .WithImageTag("dev")
+    .WithEnvironment("ASPNETCORE_ENVIRONMENT", builder.Environment.EnvironmentName)
+    .WithOtlpExporter()
+    .WithHttpEndpoint(targetPort: 8080)
+    .WithHttpHealthCheck(path: "/health")
+    .WithHttpHealthCheck(path: "/alive")
+    .WithHttpHealthCheck(path: "/started");
+
 builder.AddAkka("akka", "testing", akkaConfigure: akkaBuilder =>
 {
     akkaBuilder
         .WithLighthouse(3)
-        .WithNode(targetPort: 8000, resource: nodeOne)
-        .WithNode(targetPort: 8001, resource: nodeTwo);
+        .WithSeedNode(targetPort: 8002, resource: nodeTwoAsSeedNode, endpointName: "akka")
+        .WithNode(targetPort: 8000, resource: nodeOne, endpointName: "akka")
+        .WithNode(targetPort: 8001, resource: nodeTwo, endpointName: "akka");
 });
 
 await builder.Build().RunAsync();
