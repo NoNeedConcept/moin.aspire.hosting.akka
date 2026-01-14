@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Hosting;
 using Servus.Core.Application.Startup;
 
 namespace akka.core.Startup;

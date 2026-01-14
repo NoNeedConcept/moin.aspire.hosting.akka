@@ -18,7 +18,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Aspire.Hosting" Version="[13.0.0,)" />
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>moin.aspire.hosting.akka.tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Aspire.Hosting" Version="13.1.0" />
       <PackageReference Include="Servus.Core" Version="0.33.2" />
     </ItemGroup>
 

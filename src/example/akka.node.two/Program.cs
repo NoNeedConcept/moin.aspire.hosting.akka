@@ -8,7 +8,7 @@ Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
     .CreateBootstrapLogger();
 
-var runner = AppBuilder.Create(WebApplication.CreateBuilder(args), b => b.Build())
+var runner = AppBuilder.Create()
     .WithSetup<ConfigurationSetupContainer>()
     .WithSetup<LoggingSetupContainer>()
     .WithSetup<HostApplicationBuilderSetupContainer>()

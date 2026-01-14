@@ -4,6 +4,7 @@ using Aspire.Hosting.ApplicationModel;
 using Aspire.Hosting.Health;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using moin.aspire.hosting.akka;
 
 namespace Aspire.Hosting;
 
@@ -12,6 +13,15 @@ public class AkkaResourceBuilder(string name, string systemName, IDistributedApp
 {
     public IDistributedApplicationBuilder DistributedApplicationBuilder => builder;
     public string SystemName => systemName;
+
+    public SeedNodeEnvNameOptions SeedNodeEnvNameOptionDefault { get; internal set; } = new();
+
+    public string HostnameEnvNameDefault { get; internal set; } = AkkaDefaultEnvName.HostnameEnvName;
+
+    public string PortEnvNameDefault { get; internal set; } = AkkaDefaultEnvName.PortEnvName;
+
+    public AkkaEnvNameBuilder CreateEnvNameBuilder()
+        => new(SeedNodeEnvNameOptionDefault, HostnameEnvNameDefault, PortEnvNameDefault);
 
     public IResourceBuilder<T> AddResource<T>(T instance) where T : IResource
         => DistributedApplicationBuilder.AddResource(instance);
@@ -35,21 +45,21 @@ public class AkkaResourceBuilder(string name, string systemName, IDistributedApp
         foreach (var node in nodes)
         {
             var nodeBuilder = builder.CreateResourceBuilder(node);
-            if (!nodeBuilder.Resource.TryGetAnnotationsOfType<AkkaNodeAnnotation>(out var result))
+            var options = node.GetSeedNodeEnvNameOptions(SeedNodeEnvNameOptionDefault);
+
+            if (options.Mode is EnvValueMode.SingleValue)
             {
+                nodeBuilder.WithEnvironment(options.SeedNodeEnvName, builder.GetSeedNodesOneliner(systemName));
+                foreach (var seedNode in seedNodeResources)
+                {
+                    nodeBuilder.WithReferenceRelationship(seedNode);
+                }
+                
                 continue;
             }
 
-            var annotation = result.Single();
-            var seedNodeEnvName = annotation.SeedNodeEnvConfigure.Invoke();
-            var mode = annotation.Mode;
 
-            if (mode is not EnvValueMode.Array)
-            {
-                nodeBuilder.WithEnvironment(name: seedNodeEnvName, value: builder.GetSeedNodesOneliner(systemName));
-                continue;
-            }
-
+            var seedNodeEnvName = options.SeedNodeEnvName;
             var seedNodes = builder.GetSeedNodeAddresse(SystemName);
             seedNodeEnvName = seedNodeEnvName.EndsWith("__")
                 ? seedNodeEnvName

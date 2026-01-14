@@ -6,12 +6,17 @@ namespace Aspire.Hosting.ApplicationModel;
 [DebuggerDisplay("Type = {GetType().Name,nq}")]
 public class AkkaNodeAnnotation : IResourceAnnotation
 {
-    public AkkaNodeAnnotation(Func<string> seedNodeEnvConfigure, EnvValueMode mode)
+    public AkkaNodeAnnotation(SeedNodeEnvNameOptions? options = null)
     {
-        SeedNodeEnvConfigure = seedNodeEnvConfigure;
-        Mode = mode;
+        Options = options;
     }
 
-    public Func<string> SeedNodeEnvConfigure { get; }
-    public EnvValueMode Mode { get; }
+    public AkkaNodeAnnotation(Action<SeedNodeEnvNameOptions>? configure = null)
+    {
+        var options = new SeedNodeEnvNameOptions();
+        configure?.Invoke(options);
+        Options = options;
+    }
+
+    public SeedNodeEnvNameOptions? Options { get; }
 }

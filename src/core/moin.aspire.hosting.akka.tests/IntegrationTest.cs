@@ -1,21 +1,13 @@
 using Microsoft.Extensions.Logging;
 
-namespace moin.aspire.hosting.akka.testing;
+namespace moin.aspire.hosting.akka.tests;
 
 [Trait("Category", "Integration")]
 public class IntegrationTest
 {
     private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(180);
 
-    // Instructions:
-    // 1. Add a project reference to the target AppHost project, e.g.:
-    //
-    //    <ItemGroup>
-    //        <ProjectReference Include="../MyAspireApp.AppHost/MyAspireApp.AppHost.csproj" />
-    //    </ItemGroup>
-    //
-    // 2. Uncomment the following example test and update 'Projects.MyAspireApp_AppHost' to match your AppHost project:
-    //
+    
     [Fact]
     public async Task GetNodesStartedReturnsOkStatusCode()
     {

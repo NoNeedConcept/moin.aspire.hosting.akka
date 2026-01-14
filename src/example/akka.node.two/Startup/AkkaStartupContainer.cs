@@ -21,9 +21,9 @@ public class AkkaStartupContainer : ActorSystemSetupContainer
             .WithClustering(serviceProvider, configure: options =>
             {
                 options.Roles = ["ping"];
-                options.ClusterReadyCheck = true;
             })
             .WithActorSystemLivenessCheck(tags: ["akka", "live"])
+            .WithAkkaClusterReadinessCheck()
             .AddService<PingActor, PingEndpoint.Ping>()
             .AddClient<PingEndpoint.Ping>()
             .AddClient<PongEndpoint.Pong>()

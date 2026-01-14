@@ -8,7 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{EAD46D4E-6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "moin.aspire.hosting.akka", "core\moin.aspire.hosting.akka\moin.aspire.hosting.akka.csproj", "{8DC3A015-F0AA-4C00-BFF8-D2D9FA3F03FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "moin.aspire.hosting.akka.testing", "core\moin.aspire.hosting.akka.testing\moin.aspire.hosting.akka.testing.csproj", "{35BDB984-7613-4C4D-8DC3-785B4F227F1C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "moin.aspire.hosting.akka.tests", "core\moin.aspire.hosting.akka.tests\moin.aspire.hosting.akka.tests.csproj", "{35BDB984-7613-4C4D-8DC3-785B4F227F1C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "akka.core", "example\akka.core\akka.core.csproj", "{CB6A7CAC-288C-41AD-9700-66F98FFFC49C}"
 EndProject
@@ -21,6 +21,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "moin.akka.cluster.hosting.aspire", "hosting\moin.akka.cluster.hosting.aspire\moin.akka.cluster.hosting.aspire.csproj", "{056A6D93-7B47-4295-822B-19E774BFE877}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "moin.akka.remote.hosting.aspire", "hosting\moin.akka.remote.hosting.aspire\moin.akka.remote.hosting.aspire.csproj", "{B2BE072B-3014-44A8-8E75-F0D67173F5CC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4C31B98E-F756-4774-BBB7-B6588CE09697}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\build-and-release.yml = ..\.github\workflows\build-and-release.yml
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
